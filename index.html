@@ -2,74 +2,101 @@
 <html lang="ar" dir="rtl">
 <head>
     <meta charset="UTF-8">
-    <title>اختبار قراءة المخطوطات</title>
+    <title>مختبر قراءة المخطوطات - الأستاذ هاشم</title>
     <style>
-        body { font-family: 'Amiri', serif; background-color: #fcfbf7; padding: 20px; display: flex; flex-direction: column; align-items: center; }
-        .main-wrapper { display: flex; width: 95%; max-width: 1200px; gap: 20px; }
-        .section { flex: 1; background: white; padding: 20px; border-radius: 12px; box-shadow: 0 4px 10px rgba(0,0,0,0.1); }
-        .img-container { position: relative; overflow: hidden; border: 1px solid #ddd; cursor: zoom-in; }
-        #displayImg { width: 100%; display: block; transition: transform 0.1s; transform-origin: center; }
-        textarea { width: 100%; height: 250px; font-size: 1.4rem; padding: 15px; border: 2px solid #d7ccc8; border-radius: 8px; resize: none; box-sizing: border-box; font-family: 'Amiri', serif; }
-        .result-box { background: #fdfae3; padding: 20px; border-radius: 12px; margin-top: 20px; display: none; width: 100%; }
-        .word-correct { color: green; font-weight: bold; }
-        .word-wrong { color: red; text-decoration: line-through; }
-        .word-original { color: brown; background: #fff9c4; padding: 0 3px; }
-        button { background: #5d4037; color: white; border: none; padding: 12px; cursor: pointer; border-radius: 5px; width: 100%; margin-top: 10px; font-family: 'Amiri'; font-size: 1.1rem; }
+        body { font-family: 'Amiri', serif; background-color: #fcfbf7; padding: 20px; display: flex; flex-direction: column; align-items: center; color: #3e2723; }
+        .main-wrapper { display: flex; width: 95%; max-width: 1300px; gap: 25px; align-items: flex-start; }
+        .section { flex: 1; background: white; padding: 25px; border-radius: 15px; box-shadow: 0 8px 20px rgba(0,0,0,0.1); }
+        .student-info { display: flex; gap: 15px; margin-bottom: 20px; background: #efebe9; padding: 20px; border-radius: 10px; width: 100%; box-sizing: border-box; }
+        .student-info input { flex: 1; padding: 12px; border: 1px solid #d7ccc8; border-radius: 6px; font-size: 1.1rem; font-family: 'Amiri'; }
+        .img-container { position: relative; overflow: hidden; border: 2px solid #5d4037; border-radius: 8px; cursor: zoom-in; background: #000; height: 550px; display: flex; align-items: center; }
+        #displayImg { width: 100%; transition: transform 0.15s ease-out; transform-origin: center center; }
+        textarea#studentInput { width: 100%; height: 350px; font-size: 1.6rem; line-height: 2.5rem; padding: 20px; border: 2px solid #d7ccc8; border-radius: 8px; resize: none; box-sizing: border-box; font-family: 'Amiri', serif; background: #fffdf9; }
+        #liveFeedback { font-weight: bold; font-size: 1.3rem; text-align: center; margin-top: 15px; min-height: 2rem; }
+        .success-text { color: #2e7d32; } .error-text { color: #c62828; }
+        button { background-color: #5d4037; color: white; border: none; padding: 15px 30px; border-radius: 6px; cursor: pointer; font-size: 1.2rem; font-family: 'Amiri'; margin-top: 15px; width: 100%; transition: 0.3s; }
+        button:hover { background-color: #3e2723; }
+        .result-box { background: #fdfae3; border: 2px solid #fff9c4; padding: 25px; border-radius: 12px; margin-top: 30px; text-align: right; width: 100%; box-sizing: border-box; display: none; }
+        .comparison { margin-top: 20px; font-size: 1.4rem; line-height: 2.8rem; border-top: 1px solid #d7ccc8; padding-top: 15px; }
+        .word-correct { color: #2e7d32; font-weight: bold; }
+        .word-wrong { color: #c62828; text-decoration: line-through; }
+        .word-original { color: #5d4037; font-weight: bold; background: #fff9c4; padding: 0 5px; border-radius: 4px; }
     </style>
     <link href="https://fonts.googleapis.com/css2?family=Amiri&display=swap" rel="stylesheet">
 </head>
 <body>
 
-    <h2>اختبار نسخ المخطوط العربي</h2>
+    <h1 style="color: #5d4037; margin-bottom: 10px;">مختبر قراءة المخطوطات العربيّة</h1>
+    <p style="margin-bottom: 25px; font-size: 1.2rem; color: #8d6e63;">الهدف: النسخ الحرفي الدقيق للنص الموجود في الصفحة اليمنى من المخطوط.</p>
     
-    <div style="display:flex; gap:10px; margin-bottom:15px; width:95%;">
-        <input type="text" id="studentName" placeholder="اسم الطالب" style="flex:1; padding:10px;">
-        <input type="text" id="studentID" placeholder="الرقم الجامعي" style="flex:1; padding:10px;">
+    <div class="student-info">
+        <input type="text" id="studentName" placeholder="اسم الطالب الثلاثي">
+        <input type="text" id="studentID" placeholder="الرقم الجامعي / الأكاديمي">
     </div>
 
     <div class="main-wrapper">
-        <div class="section">
-            <div class="img-container" id="zoom-area">
-                <img id="displayImg" src="image.jpg">
+        <div class="section" style="flex: 1.2;">
+            <div class="img-container" id="zoom-container">
+                <img id="displayImg" src="image.jpg" alt="صورة المخطوط">
             </div>
+            <p style="text-align:center; color:#8d6e63; margin-top:10px;">* حرك الفأرة فوق المخطوط للتكبير لرؤية أدق التفاصيل.</p>
         </div>
+        
         <div class="section">
-            <textarea id="studentInput" placeholder="اكتب النص هنا..."></textarea>
-            <button id="finishBtn" onclick="showResults()">إنهاء الاختبار</button>
-            <div id="resultBox" class="result-box">
-                <p id="scoreDisplay" style="font-size:1.3rem; font-weight:bold;"></p>
-                <div id="comparisonArea" style="line-height:2rem;"></div>
+            <textarea id="studentInput" placeholder="ابدأ النسخ من (بسم الله الرحمن الرحيم)..."></textarea>
+            <div id="liveFeedback"></div>
+            <button id="finishBtn" onclick="showResults()">إنهاء الاختبار وعرض التصحيح</button>
+
+            <div class="result-box" id="resultBox">
+                <h3 style="border-bottom: 2px solid #5d4037; padding-bottom: 10px;">التقرير النهائي للتصحيح</h3>
+                <div id="studentDataDisplay" style="font-size: 1.3rem; margin-bottom: 15px;"></div>
+                <p style="font-size: 1.6rem; font-weight: bold;">نسبة إتقان القراءة: <span id="accuracyPercent"></span></p>
+                <div id="comparisonArea" class="comparison"></div>
+                <button onclick="location.reload()" style="background:#8d6e63; width: auto; margin-top: 20px;">محاولة جديدة</button>
             </div>
         </div>
     </div>
 
     <script>
-        // --- ضع النص الصحيح هنا قبل الرفع لـ GitHub ---
-        const correctText = "اكتب النص النموذجي هنا"; 
-        const scriptURL = "رابط_جوجل_شيت_الخاص_بك";
+        // النص الذي استخرجته لك من الصورة
+        const correctText = "بسم الله الرحمن الرحيم رب يسر يا كريم الحمد لله الذي فضل بني آدم بالعلم والعمل على جميع العالم والصلاة والسلام على محمد سيد العرب والعجم وعلى آله وأصحابه ينابيع العلوم والحكم وبعد فلما رأيت كثيرا من طلاب العلم في زماننا يجدون إلى العلم ولا يصلون ومن منافعه وثمراته وهي العمل به والنشر يحرمون لما أنهم أخطأوا طريقه وتركوا شرائطه وكل من أخطأ الطريق ضل ولا ينال المقصود قل أو جل فأردت وأحببت أن أبين لهم طريق التعلم على ما رأيت في الكتب وسمعت من أساتيذي أولي العلم والحكم رجاء للدعاء لي من الراغبين فيه المخلصين بالفوز والخلاص في يوم الدين بعدما استخرت الله تعالى فيه وسميته كتاب تعليم المتعلم طريق التعلم وجعلته فصولا"; 
 
-        function enableZoom() {
-            const img = document.getElementById('displayImg');
-            const container = document.getElementById('zoom-area');
-            container.onmousemove = (e) => {
-                const rect = container.getBoundingClientRect();
-                const x = ((e.clientX - rect.left) / rect.width) * 100;
-                const y = ((e.clientY - rect.top) / rect.height) * 100;
-                img.style.transformOrigin = `${x}% ${y}%`;
-                img.style.transform = "scale(2.5)";
-            };
-            container.onmouseleave = () => img.style.transform = "scale(1)";
-        }
-        window.onload = enableZoom;
+        // رابط جوجل شيت الخاص بك (تأكد من وضعه هنا)
+        const scriptURL = "ضع_رابط_جوجل_هنا";
 
         function normalize(t) { return t.trim().replace(/\s+/g, ' '); }
 
-        function showResults() {
-            const name = document.getElementById('studentName').value;
-            const id = document.getElementById('studentID').value;
-            if(!name || !id) return alert("أدخل بياناتك أولاً!");
+        // التنبيه الفوري
+        const studentInput = document.getElementById('studentInput');
+        studentInput.addEventListener('input', function() {
+            const feedback = document.getElementById('liveFeedback');
+            if (normalize(correctText).startsWith(normalize(this.value))) {
+                feedback.innerHTML = '<span class="success-text">قراءة صحيحة، تابع... ✅</span>';
+                this.style.borderColor = "#a1cba1";
+            } else {
+                feedback.innerHTML = '<span class="error-text">هناك خطأ في الكلمة أو الحرف الأخير! ❌</span>';
+                this.style.borderColor = "#e5a1a1";
+            }
+        });
 
-            const userText = document.getElementById('studentInput').value;
+        // ميزة التكبير المتقدمة
+        const img = document.getElementById('displayImg');
+        const container = document.getElementById('zoom-container');
+        container.onmousemove = (e) => {
+            const rect = container.getBoundingClientRect();
+            const x = ((e.clientX - rect.left) / rect.width) * 100;
+            const y = ((e.clientY - rect.top) / rect.height) * 100;
+            img.style.transformOrigin = `${x}% ${y}%`;
+            img.style.transform = "scale(3)"; // تكبير 3 مرات للدقة
+        };
+        container.onmouseleave = () => img.style.transform = "scale(1)";
+
+        async function showResults() {
+            const name = document.getElementById('studentName').value.trim();
+            const id = document.getElementById('studentID').value.trim();
+            if(!name || !id) return alert("يرجى ملء بيانات الطالب أولاً!");
+
+            const userText = studentInput.value;
             const origWords = normalize(correctText).split(' ');
             const userWords = normalize(userText).split(' ');
             let correct = 0;
@@ -86,13 +113,16 @@
 
             const score = ((correct / origWords.length) * 100).toFixed(1) + "%";
             
-            // إرسال لجوجل شيت
+            // إرسال البيانات لجوجل شيت
             fetch(scriptURL, { method: 'POST', mode: 'no-cors', body: JSON.stringify({name, id, score}) });
 
-            document.getElementById('scoreDisplay').innerText = "الدرجة: " + score;
+            document.getElementById('studentDataDisplay').innerHTML = `<strong>الطالب:</strong> ${name} <br> <strong>الرقم:</strong> ${id}`;
+            document.getElementById('accuracyPercent').innerText = score;
             document.getElementById('comparisonArea').innerHTML = html;
             document.getElementById('resultBox').style.display = 'block';
-            document.getElementById('studentInput').disabled = true;
+            studentInput.disabled = true;
+            document.getElementById('finishBtn').style.display = 'none';
+            document.getElementById('resultBox').scrollIntoView({ behavior: 'smooth' });
         }
     </script>
 </body>
