@@ -2,90 +2,97 @@
 <html lang="ar" dir="rtl">
 <head>
     <meta charset="UTF-8">
-    <title>مختبر المخطوطات </title>
+    <title>مختبر المخطوطات الذكي</title>
     <style>
-        body { font-family: 'Amiri', serif; background-color: #fcfbf7; padding: 20px; display: flex; flex-direction: column; align-items: center; }
-        .main-wrapper { display: flex; width: 95%; max-width: 1200px; gap: 20px; }
-        .section { flex: 1; background: white; padding: 20px; border-radius: 12px; box-shadow: 0 4px 10px rgba(0,0,0,0.1); }
-        /* إطار الصورة */
-        .img-container { position: relative; overflow: hidden; border: 2px solid #5d4037; height: 500px; background: #fff; cursor: zoom-in; display: flex; align-items: center; justify-content: center; }
+        body { font-family: 'Amiri', serif; background: #fcfbf7; padding: 20px; display: flex; flex-direction: column; align-items: center; }
+        .container { width: 95%; max-width: 1200px; display: flex; gap: 20px; }
+        .card { flex: 1; background: white; padding: 20px; border-radius: 12px; box-shadow: 0 4px 10px rgba(0,0,0,0.1); }
+        .img-box { position: relative; overflow: hidden; border: 2px solid #5d4037; height: 500px; cursor: zoom-in; display: flex; align-items: center; justify-content: center; background: #eee; }
         #displayImg { width: 100%; transition: transform 0.1s; transform-origin: center; }
-        textarea { width: 100%; height: 250px; font-size: 1.5rem; padding: 15px; border: 2px solid #d7ccc8; border-radius: 8px; resize: none; box-sizing: border-box; font-family: 'Amiri', serif; }
-        .result-box { background: #fdfae3; padding: 20px; border-radius: 12px; margin-top: 20px; display: none; width: 100%; text-align: right; }
-        button { background: #5d4037; color: white; border: none; padding: 12px; cursor: pointer; border-radius: 5px; width: 100%; margin-top: 10px; font-family: 'Amiri'; font-size: 1.2rem; }
+        textarea { width: 100%; height: 300px; font-size: 1.5rem; padding: 15px; border: 2px solid #d7ccc8; border-radius: 8px; resize: none; box-sizing: border-box; font-family: 'Amiri'; }
+        button { background: #5d4037; color: white; border: none; padding: 15px; cursor: pointer; border-radius: 5px; width: 100%; font-family: 'Amiri'; font-size: 1.2rem; margin-top: 10px; }
+        #loader { font-size: 1.5rem; margin: 50px; color: #8d6e63; }
+        .hidden { display: none !important; }
     </style>
     <link href="https://fonts.googleapis.com/css2?family=Amiri&display=swap" rel="stylesheet">
 </head>
 <body>
 
-    <h2 style="color: #5d4037;">مختبر قراءة المخطوطات العربيّة</h2>
-    
-    <div style="display:flex; gap:10px; margin-bottom:15px; width:95%;">
-        <input type="text" id="studentName" placeholder="اسم الطالب" style="flex:1; padding:10px;">
-        <input type="text" id="studentID" placeholder="الرقم الجامعي" style="flex:1; padding:10px;">
-    </div>
+    <div id="loader">جاري جلب بيانات الاختبار... ⏳</div>
 
-    <div class="main-wrapper">
-        <div class="section">
-            <div class="img-container" id="zoom-area">
-                <img id="displayImg" src="https://storage.googleapis.com/gweb-unison-publish.appspot.com/files/image.jpg">
-            </div>
+    <div id="mainContent" class="hidden">
+        <h2 style="color: #5d4037;">مختبر قراءة المخطوطات</h2>
+        <div style="margin-bottom: 15px;">
+            <input type="text" id="sName" placeholder="اسم الطالب" style="padding: 10px; width: 200px;">
+            <input type="text" id="sID" placeholder="الرقم الجامعي" style="padding: 10px; width: 200px;">
         </div>
-        <div class="section">
-            <textarea id="studentInput" placeholder="ابدأ بالنسخ هنا..."></textarea>
-            <div id="liveFeedback" style="margin-top:10px; font-weight:bold;"></div>
-            <button onclick="showResults()">إنهاء الاختبار وعرض النتيجة</button>
-            <div id="resultBox" class="result-box">
-                <p id="accuracyPercent" style="font-size:1.5rem; font-weight:bold;"></p>
-                <div id="comparisonArea" style="line-height:2.5rem;"></div>
+
+        <div class="container">
+            <div class="card">
+                <div class="img-box" id="zoomArea">
+                    <img id="displayImg" src="">
+                </div>
+            </div>
+            <div class="card">
+                <textarea id="studentInput" placeholder="انسخ النص هنا..."></textarea>
+                <div id="feedback" style="margin-top:10px; font-weight:bold;"></div>
+                <button onclick="finish()">إنهاء وإرسال النتيجة</button>
             </div>
         </div>
     </div>
 
     <script>
-        const correctText = "بسم الله الرحمن الرحيم رب يسر يا كريم الحمد لله الذي فضل بني آدم بالعلم والعمل على جميع العالم والصلاة والسلام على محمد سيد العرب والعجم وعلى آله وأصحابه ينابيع العلوم والحكم وبعد فلما رأيت كثيرا من طلاب العلم في زماننا يجدون إلى العلم ولا يصلون ومن منافعه وثمراته وهي العمل به والنشر يحرمون لما أنهم أخطأوا طريقه وتركوا شرائطه وكل من أخطأ الطريق ضل ولا ينال المقصود قل أو جل فأردت وأحببت أن أبين لهم طريق التعلم على ما رأيت في الكتب وسمعت من أساتيذي أولي العلم والحكم رجاء للدعاء لي من الراغبين فيه المخلصين بالفوز والخلاص في يوم الدين بعدما استخرت الله تعالى فيه وسميته كتاب تعليم المتعلم طريق التعلم وجعلته فصولا";
+        // --- ضع رابط الـ Apps Script الخاص بك هنا ---
+        const apiURL = "ضع_رابط_APPS_SCRIPT_هنا";
+        let correctText = "";
+
+        // جلب البيانات عند الفتح
+        window.onload = async function() {
+            try {
+                const res = await fetch(apiURL);
+                const config = await res.json();
+                document.getElementById('displayImg').src = config.image;
+                correctText = config.text;
+                document.getElementById('loader').classList.add('hidden');
+                document.getElementById('mainContent').classList.remove('hidden');
+                setupZoom();
+            } catch (e) { document.getElementById('loader').innerText = "خطأ في الاتصال بالجدول! ❌"; }
+        };
 
         // التنبيه الفوري
-        document.getElementById('studentInput').addEventListener('input', function() {
-            const feedback = document.getElementById('liveFeedback');
+        document.getElementById('studentInput').oninput = function() {
             const val = this.value.trim().replace(/\s+/g, ' ');
             const target = correctText.trim().replace(/\s+/g, ' ');
-            if (target.startsWith(val)) {
-                feedback.innerHTML = '<span style="color:green">صحيح.. ✅</span>';
-            } else {
-                feedback.innerHTML = '<span style="color:red">خطأ! ❌</span>';
-            }
-        });
-
-        // التكبير
-        const img = document.getElementById('displayImg');
-        const zoomArea = document.getElementById('zoom-area');
-        zoomArea.onmousemove = (e) => {
-            const rect = zoomArea.getBoundingClientRect();
-            img.style.transformOrigin = `${((e.clientX - rect.left) / rect.width) * 100}% ${((e.clientY - rect.top) / rect.height) * 100}%`;
-            img.style.transform = "scale(2.5)";
+            document.getElementById('feedback').innerHTML = target.startsWith(val) ? 
+                '<span style="color:green">صحيح ✅</span>' : '<span style="color:red">خطأ ❌</span>';
         };
-        zoomArea.onmouseleave = () => img.style.transform = "scale(1)";
 
-        function showResults() {
-            const userText = document.getElementById('studentInput').value;
-            const origWords = correctText.trim().split(/\s+/);
-            const userWords = userText.trim().split(/\s+/);
-            let correct = 0;
-            let html = '';
+        function setupZoom() {
+            const img = document.getElementById('displayImg');
+            const box = document.getElementById('zoomArea');
+            box.onmousemove = (e) => {
+                const r = box.getBoundingClientRect();
+                img.style.transformOrigin = `${((e.clientX - r.left)/r.width)*100}% ${((e.clientY - r.top)/r.height)*100}%`;
+                img.style.transform = "scale(2.5)";
+            };
+            box.onmouseleave = () => img.style.transform = "scale(1)";
+        }
 
-            origWords.forEach((word, i) => {
-                if (word === userWords[i]) {
-                    html += `<span style="color:green">${word}</span> `;
-                    correct++;
-                } else {
-                    html += `<span style="color:red">${userWords[i] || "___"}</span> <span style="color:brown; background:#eee;">[${word}]</span> `;
-                }
-            });
+        async function finish() {
+            const name = document.getElementById('sName').value;
+            const id = document.getElementById('sID').value;
+            if(!name || !id) return alert("أدخل بياناتك!");
 
-            document.getElementById('accuracyPercent').innerText = "الدرجة: " + ((correct / origWords.length) * 100).toFixed(1) + "%";
-            document.getElementById('comparisonArea').innerHTML = html;
-            document.getElementById('resultBox').style.display = 'block';
+            const userWords = document.getElementById('studentInput').value.trim().split(/\s+/);
+            const correctWords = correctText.trim().split(/\s+/);
+            let score = 0;
+            correctWords.forEach((w, i) => { if(w === userWords[i]) score++; });
+            const finalScore = ((score/correctWords.length)*100).toFixed(1) + "%";
+
+            // إرسال للجدول
+            await fetch(apiURL, { method: 'POST', body: JSON.stringify({name, id, score: finalScore}) });
+            alert("تم إرسال نتيجتك بنجاح: " + finalScore);
+            location.reload();
         }
     </script>
 </body>
